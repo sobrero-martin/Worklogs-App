@@ -13,10 +13,6 @@ namespace Worklogs.DB.Data
         public DbSet<User> Users { get; set; }
         public DbSet<UploadedFile> UploadedFiles { get; set; }
         public DbSet<WorkLog> WorkLogs { get; set; }
-        public DbSet <Report> Reports { get; set; }
-        public DbSet <Project> Projects { get; set; }
-        public DbSet <MonthlyProjectHistory> MonthlyProjectHistories { get; set; }
-
 
         public AppDbContext(DbContextOptions options) : base(options)
         {

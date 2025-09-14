@@ -12,15 +12,16 @@ namespace Worklogs.DB.Data.Entities
         public int UploadedFileID { get; set; }
         public UploadedFile? UploadedFile { get; set; }
 
-        public required int ProjectId { get; set; }
-        public Project? Project { get; set; }
-
         [Required(ErrorMessage = "Employee name is required.")]
         [MaxLength(50, ErrorMessage = "Employee name cannot exceed 50 characters.")]
         public required string EmployeeName { get; set; }
 
+        [Required(ErrorMessage = "Activity is required.")]
+        [MaxLength(30, ErrorMessage = "Activity cannot exceed 30 characters.")]
+        public required string Activity { get; set; }
+
         [Required(ErrorMessage = "Date worked is required.")]
-        public required DateTime DateWorked { get; set; }
+        public required string DateWorked { get; set; }
 
         [Required(ErrorMessage = "Time worked is required.")]
         public required int TimeWorked { get; set; } // in seconds

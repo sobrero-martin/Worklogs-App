@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Worklogs.DB.Data;
+using Worklogs.DB.Data.Entities;
+using Worklogs.Repository.Repository;
 using Worklogs.Server.Client.Pages;
 using Worklogs.Server.Components;
 
@@ -7,8 +9,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("ConnSqlServer") ?? throw new InvalidOperationException("Connection string 'ConnSqlServer' not found.");
 
+builder.Services.AddControllers();
+
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUploadedFileRepository, UploadedFileRepository>();
+builder.Services.AddScoped<IWorkLogRepository, WorkLogRepository>();
+
+builder.Services.AddHttpClient();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -21,6 +33,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 else
 {
@@ -39,5 +53,7 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Worklogs.Server.Client._Imports).Assembly);
+
+app.MapControllers();
 
 app.Run();

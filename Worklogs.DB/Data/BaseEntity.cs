@@ -8,7 +8,7 @@ using Worklogs.Shared.ENUM;
 namespace Worklogs.DB.Data
 {
 
-    public class BaseEntity
+    public class BaseEntity : IBaseEntity
     {
         public int Id { get; set; }
         public EnumRecordStatus RecordStatus { get; set; } = EnumRecordStatus.Draft;
