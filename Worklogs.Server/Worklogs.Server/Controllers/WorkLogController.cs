@@ -16,10 +16,10 @@ namespace Worklogs.Server.Controllers
             this.repository = repository;
         }
 
-        [HttpGet("list")]
-        public async Task<ActionResult<List<UploadedFilesListDTO>>> GetList()
+        [HttpGet("list/{uploadedFileID:int}")]
+        public async Task<ActionResult<List<UploadedFilesListDTO>>> GetList(int uploadedFileID)
         {
-            var list = await repository.GetList();
+            var list = await repository.GetList(uploadedFileID);
             if (list == null)
             {
                 return NotFound("No list found(NULL).");

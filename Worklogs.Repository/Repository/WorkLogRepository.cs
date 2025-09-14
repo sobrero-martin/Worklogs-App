@@ -19,9 +19,10 @@ namespace Worklogs.Repository.Repository
             this.context = context;
         }
 
-        public async Task<List<WorkLogDTO>> GetList()
+        public async Task<List<WorkLogDTO>> GetList(int uploadedFileID)
         {
             return await context.WorkLogs
+                .Where(x => x.UploadedFileID == uploadedFileID)
                 .Select(x => new WorkLogDTO
                 {
                     EmployeeName = x.EmployeeName,

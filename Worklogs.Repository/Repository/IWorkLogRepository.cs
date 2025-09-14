@@ -12,6 +12,6 @@ namespace Worklogs.Repository.Repository
     {
         Task GetWorklogsExcel(int uploadedFileID, string filePath);
 
-        Task<List<WorkLogDTO>> GetList();
+        Task<List<WorkLogDTO>> GetList(int uploadedFileID);
     }
 }
