@@ -16,22 +16,14 @@ namespace Worklogs.Server.Controllers
             this.repository = repository;
         }
 
-        [HttpGet("login")]
-        public async Task<ActionResult> Login(string email, string password)
+        [HttpPost("login")]
+        public async Task<ActionResult> Login(LoginDTO login)
         {
-
-            LoginDTO login = new LoginDTO
-            {
-                Email = email,
-                Password = password
-            };
-
             var res = await repository.Login(login);
 
             if (res == 0)
-            {
                 return NotFound("Email doesn't exist or the password is incorrect");
-            }
+           
             
             return Ok("Login was succesful");
         }

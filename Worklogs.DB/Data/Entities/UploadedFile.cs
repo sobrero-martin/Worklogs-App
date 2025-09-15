@@ -12,7 +12,7 @@ namespace Worklogs.DB.Data.Entities
     public class UploadedFile : BaseEntity
     {
         [Required(ErrorMessage = "File name is required.")]
-        [MaxLength(35, ErrorMessage = "The file name must not exceed {1} characters.")]
+        [MaxLength(50, ErrorMessage = "The file name must not exceed {1} characters.")]
         public required string FileName { get; set; }
 
         [Required(ErrorMessage = "Upload date is required.")]

@@ -12,7 +12,7 @@ using Worklogs.DB.Data;
 namespace Worklogs.DB.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250914194511_test1")]
+    [Migration("20250915010111_test1")]
     partial class test1
     {
         /// <inheritdoc />
@@ -35,8 +35,8 @@ namespace Worklogs.DB.Migrations
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasMaxLength(35)
-                        .HasColumnType("nvarchar(35)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("RecordStatus")
                         .HasColumnType("int");

@@ -17,7 +17,7 @@ namespace Worklogs.DB.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FileName = table.Column<string>(type: "nvarchar(35)", maxLength: 35, nullable: false),
+                    FileName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     UploadDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RecordStatus = table.Column<int>(type: "int", nullable: false)
                 },
