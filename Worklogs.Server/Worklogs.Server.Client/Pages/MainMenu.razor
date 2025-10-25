@@ -5,7 +5,7 @@
 
 <PageTitle>Main Menu</PageTitle>
 
-<h1>Main Menu</h1>
+<h1 style="color:#DFD0B8">Main Menu</h1>
 
 @if(uploadedFiles != null)
 {
@@ -15,24 +15,24 @@
     }
 }
 <div class="position-fixed bottom-0 end-0 m-5">
-<button class="btn btn-primary" @onclick=TogglePopUp>Upload File</button>
-<button class="btn btn-primary" @onclick=Sync>Sync Files</button>
+    <button class="btn fw-bold" style="background-color:#222831; color:#DFD0B8" @onclick=TogglePopUp>Upload File</button>
+    <button class="btn fw-bold" style="background-color:#222831; color:#DFD0B8" @onclick=Sync>Sync Files</button>
 </div>
 @if (popUpVisible)
 {
-    <div class="position-fixed top-50 start-50 translate-middle bg-white border border-primary rounded p-3 shadow border-3">
-        <p class="p-3 text-primary fw-bold">Select a file to upload</p>
-        <button class="btn btn-light border border-danger text-danger border-3 fw-bold position-fixed pe-1 ps-1 pb-0 pt-0 top-0 end-0" @onclick=TogglePopUp>X</button>
+    <div class="position-fixed top-50 start-50 translate-middle bg-transparent border rounded p-3 shadow border-3" style="border-color:#222831 !important;">
+        <p class="p-3 fw-bold" style="color:#DFD0B8">Select a file to upload</p>
+        <button class="btn border border-danger text-danger border-3 fw-bold position-fixed pe-1 ps-1 pb-0 pt-0 top-0 end-0" style="background-color:#222831" @onclick=TogglePopUp>X</button>
         <InputFile @ref="fileInput" OnChange="HandleFileSelected"/>
-        <button class="btn btn-primary" @onclick="UploadFile">Upload</button>
+        <button class="btn fw-bold" style="background-color:#222831; color:#DFD0B8" @onclick="UploadFile">Upload</button>
     </div>
 }
 
 @if (errorPopupVisible)
 {
-    <div class="position-fixed top-50 start-50 translate-middle bg-white border border-danger rounded p-3 shadow border-3">
+    <div class="position-fixed top-50 start-50 translate-middle border border-danger rounded p-3 shadow border-3" style="background-color:#222831">
         <p class="p-3 text-danger fw-bold">@errorText</p>
-        <button class="btn btn-light border border-danger text-danger border-3 fw-bold position-fixed pe-1 ps-1 pb-0 pt-0 top-0 end-0" @onclick="() => errorPopupVisible = false">X</button>
+        <button class="btn btn-light border border-danger text-danger border-3 fw-bold position-fixed pe-1 ps-1 pb-0 pt-0 top-0 end-0" style="background-color:#222831" @onclick=" ()=> errorPopupVisible = false">X</button>
     </div>
 }
 

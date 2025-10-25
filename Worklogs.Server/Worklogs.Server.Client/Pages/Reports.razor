@@ -3,15 +3,15 @@
 
 <PageTitle>Reports</PageTitle>
 
-<h3>Reports</h3>
+<h3 style="color:#DFD0B8">Reports</h3>
 
-<p class="fw-bold">Employee - Date Worked - Time Worked - Activity</p><br />
+<p style="color:#DFD0B8"  class="fw-bold">Employee - Date Worked - Time Worked - Activity</p><br />
 
 @if(workLogs != null)
 {
     @foreach (var log in workLogs)
     {
-        <p>@log.EmployeeName - @log.DateWorked - @log.TimeWorked - @log.Activity</p><br />
+        <p style="color:#DFD0B8">@log.EmployeeName - @log.DateWorked - @log.TimeWorked - @log.Activity</p><br />
     }
 }
 

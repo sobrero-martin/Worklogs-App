@@ -1,7 +1,7 @@
-﻿<div class="bg-light text-primary fw-bold p-3 border border-primary border-3 rounded m-3" style="display: inline-block">
+﻿<div class="bg-transparent fw-bold p-3 border border-3 rounded m-3" style="display: inline-block; border-color:#222831 !important; color:#DFD0B8">
 <p>File: @FileName</p>
 <p>Uploaded on: @UploadDate</p>
-<button class="btn btn-primary fw-bold d-block mx-auto" @onclick="() => OnSelect.InvokeAsync(FileId)">Select</button>
+    <button class="btn fw-bold d-block mx-auto" style="background:#222831;color:#DFD0B8" @onclick="() => OnSelect.InvokeAsync(FileId)">Select</button>
 </div>
 
 @code {
