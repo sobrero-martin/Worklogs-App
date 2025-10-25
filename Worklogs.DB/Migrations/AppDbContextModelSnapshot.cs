@@ -35,6 +35,11 @@ namespace Worklogs.DB.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<int>("RecordStatus")
                         .HasColumnType("int");
 

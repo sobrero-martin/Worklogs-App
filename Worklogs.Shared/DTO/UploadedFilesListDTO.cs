@@ -8,7 +8,9 @@ namespace Worklogs.Shared.DTO
 {
     public class UploadedFilesListDTO
     {
+        public int FileId { get; set; }
         public string FileName { get; set; } = string.Empty;
         public string UploadDate { get; set; } = string.Empty;
+
     }
 }

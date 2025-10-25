@@ -15,10 +15,12 @@ namespace Worklogs.Repository.Repository
     {
 
         private readonly AppDbContext context;
+        private readonly IWorkLogRepository workLogRepository;
 
-        public UploadedFileRepository(AppDbContext context) : base(context)
+        public UploadedFileRepository(AppDbContext context, IWorkLogRepository workLogRepository) : base(context)
         {
             this.context = context;
+            this.workLogRepository = workLogRepository;
         }
 
 
@@ -27,12 +29,58 @@ namespace Worklogs.Repository.Repository
             return await context.UploadedFiles
                 .Select(x => new UploadedFilesListDTO
                 {
+                    FileId = x.Id,
                     FileName = x.FileName,
                     UploadDate = x.UploadDate.ToString("yyyy-MM-dd"),
                 })
                 .ToListAsync();
         }
 
+        public async Task<bool> SyncFilesWithCloud()
+        {
+            var supabase = new SupabaseClient().GetClient();
+            await supabase.InitializeAsync();
+
+            var bucket = supabase.Storage.From("excel-files");
+            var filesInDb = await GetFull();
+
+            var cloudFiles = await bucket.List();
+            
+
+            if (cloudFiles == null || cloudFiles.Count == 0)
+            {
+                return false;
+            }
+            cloudFiles = cloudFiles.Where(f => f.Name != ".emptyFolderPlaceholder").ToList();
+            var fileNamesInCloud = cloudFiles.Select(f => f.Name).ToList();
+            var fileNamesInDb = filesInDb.Select(f => f.FileName).ToList();
+
+            foreach (var file in filesInDb)
+            {
+                if(!fileNamesInCloud.Contains(file.FileName))
+                {
+                    await Delete(file.Id);
+                }
+            }
+
+            foreach (var cloudFile in cloudFiles) 
+            {
+                if (cloudFile.Name != null && !fileNamesInDb.Contains(cloudFile.Name))
+                {
+                    var uploadedFile = new UploadedFile
+                    {
+                        FileName = cloudFile.Name,
+                        UploadDate = cloudFile.CreatedAt ?? DateTime.Now,
+                        FilePath = bucket.GetPublicUrl(cloudFile.Name),
+                    };
+
+                    await Post(uploadedFile);
+                    await workLogRepository.GetWorklogsExcel(uploadedFile.Id, uploadedFile.FilePath);
+                }
+            }
+
+            return true;
+        }
 
         /*
         public async Task<UploadedFile?> GetByFileName(string fileName)

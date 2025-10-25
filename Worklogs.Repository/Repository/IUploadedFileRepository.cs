@@ -7,6 +7,8 @@ namespace Worklogs.Repository.Repository
     {
         Task<List<UploadedFilesListDTO>> GetList();
 
+        Task<bool> SyncFilesWithCloud();
+
         //Task<UploadedFile?> GetByFileName(string fileName);
     }
 }

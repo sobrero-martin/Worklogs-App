@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Supabase.Storage;
 using Worklogs.DB.Data.Entities;
 using Worklogs.Repository.Repository;
+using Worklogs.Services;
 using Worklogs.Shared.DTO;
 
 namespace Worklogs.Server.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/uploadedfile")]
     public class UploadedFileController : ControllerBase
     {
         private readonly IUploadedFileRepository repository;
@@ -43,6 +45,35 @@ namespace Worklogs.Server.Controllers
                 return BadRequest("No file uploaded.");
             }
 
+            var supabase = new SupabaseClient().GetClient();
+            await supabase.InitializeAsync();
+
+            var fileName = file.FileName;
+            var bucket = supabase.Storage.From("excel-files");
+
+            using var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream);
+            var fileBytes = memoryStream.ToArray();
+
+
+            await bucket.Upload(fileBytes, fileName);
+
+            var publicUrl = bucket.GetPublicUrl(fileName);
+
+            var uploadedFile = new UploadedFile
+            {
+                FileName = fileName,
+                UploadDate = DateTime.Now,
+                FilePath = publicUrl,
+            };
+
+            await repository.Post(uploadedFile);
+
+            await workLogRepository.GetWorklogsExcel(uploadedFile.Id, publicUrl);
+
+            return Ok(uploadedFile.Id);
+
+            /*
             var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
             if (!Directory.Exists(uploadsFolder))
             {
@@ -59,17 +90,37 @@ namespace Worklogs.Server.Controllers
             var uploadedFile = new UploadedFile
             {
                 FileName = file.FileName,
-                UploadDate = DateTime.Now
+                UploadDate = DateTime.Now,
+                FilePath = filePath
             };
 
             await repository.Post(uploadedFile);
 
             await workLogRepository.GetWorklogsExcel(uploadedFile.Id, filePath);
 
-            return Ok(uploadedFile.Id);
+            return Ok(uploadedFile.Id);*/
         }
 
-        /* 
+        [HttpPost("sync")]
+        public async Task<ActionResult> SyncFiles()
+        {
+            try
+            {
+                var success = await repository.SyncFilesWithCloud();
+                if (success)
+                {
+                    return Ok("Sync completed successfully.");
+                }
+                else
+                {
+                    return StatusCode(500, "Sync failed or no files to sync.");
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Error syncing files: {e.Message}");
+            }
+        }
 
         [HttpGet]
         public async Task<ActionResult<List<UploadedFile>>> GetFull()
@@ -99,7 +150,7 @@ namespace Worklogs.Server.Controllers
             }
             return Ok(entity);
         }
-
+        /*
         [HttpGet("byFileName/{fileName}")]
         public async Task<ActionResult<UploadedFile>> GetByFileName(string fileName)
         {
@@ -109,7 +160,7 @@ namespace Worklogs.Server.Controllers
                 return NotFound($"No row found with file name {fileName}.");
             }
             return Ok(entity);
-        }
+        }*/
 
         [HttpPost]
         public async Task<ActionResult<int>> Post(UploadedFile uploadedFile)
@@ -142,7 +193,7 @@ namespace Worklogs.Server.Controllers
             }
             return Ok($"Row with id {id} correctly deleted");
         }
-        */
+        
 
 
     }

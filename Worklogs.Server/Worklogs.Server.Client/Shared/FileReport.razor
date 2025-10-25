@@ -1,0 +1,12 @@
+﻿<div class="bg-light text-primary fw-bold p-3 border border-primary border-3 rounded m-3" style="display: inline-block">
+<p>File: @FileName</p>
+<p>Uploaded on: @UploadDate</p>
+<button class="btn btn-primary fw-bold d-block mx-auto" @onclick="() => OnSelect.InvokeAsync(FileId)">Select</button>
+</div>
+
+@code {
+    [Parameter] public string FileName { get; set; } = string.Empty;
+    [Parameter] public string UploadDate { get; set; } = string.Empty;
+    [Parameter] public EventCallback<int> OnSelect { get; set; }
+    [Parameter] public int FileId { get; set; }
+}

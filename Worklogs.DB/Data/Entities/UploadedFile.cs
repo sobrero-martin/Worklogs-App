@@ -17,5 +17,9 @@ namespace Worklogs.DB.Data.Entities
 
         [Required(ErrorMessage = "Upload date is required.")]
         public  DateTime UploadDate { get; set; } = DateTime.Now;
+
+        [Required(ErrorMessage = "File path is required.")]
+        [MaxLength(255, ErrorMessage = "The file path must not exceed {1} characters.")]
+        public required string FilePath { get; set; }
     }
 }

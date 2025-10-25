@@ -4,10 +4,14 @@ using Worklogs.DB.Data.Entities;
 using Worklogs.Repository.Repository;
 using Worklogs.Server.Client.Pages;
 using Worklogs.Server.Components;
+using Worklogs.Services.HttpServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("ConnSqlServer") ?? throw new InvalidOperationException("Connection string 'ConnSqlServer' not found.");
+
+builder.Services.AddScoped(sp =>
+    new HttpClient { BaseAddress = new Uri("https://localhost:7298") });
 
 builder.Services.AddControllers();
 
@@ -19,6 +23,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUploadedFileRepository, UploadedFileRepository>();
 builder.Services.AddScoped<IWorkLogRepository, WorkLogRepository>();
+
+builder.Services.AddScoped<IHttpService, HttpService>();
 
 builder.Services.AddHttpClient();
 

@@ -6,7 +6,7 @@ using Worklogs.Shared.DTO;
 namespace Worklogs.Server.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/worklogs")]
     public class WorkLogController : ControllerBase
     {
         private readonly IWorkLogRepository repository;

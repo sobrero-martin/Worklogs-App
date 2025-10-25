@@ -33,9 +33,15 @@ namespace Worklogs.Repository.Repository
                 .ToListAsync();
         }
 
-        public async Task GetWorklogsExcel(int uploadedFileID, string filePath)
+        public async Task GetWorklogsExcel(int uploadedFileID, string publicUrl)
         {
-            using var workbook = new XLWorkbook(filePath);
+            using var httpClient = new HttpClient();
+            var fileBytes = await httpClient.GetByteArrayAsync(publicUrl);
+
+            using var memoryStream = new MemoryStream(fileBytes);
+            using var workbook = new XLWorkbook(memoryStream);
+
+            //using var workbook = new XLWorkbook(filePath);
             var worksheet = workbook.Worksheets.First();
 
             foreach ( var row in worksheet.RowsUsed().Skip(1))
