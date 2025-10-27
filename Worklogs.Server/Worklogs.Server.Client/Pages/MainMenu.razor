@@ -47,12 +47,20 @@
 
     protected override async Task OnInitializedAsync()
     {
-
-        var httpResp = await http.Get<List<UploadedFilesListDTO>>("api/uploadedfile/list");
-        //uploadedFiles = await http.GetFromJsonAsync<List<UploadedFilesListDTO>>("api/uploadedfile/list");
-        if(!httpResp.Error && httpResp.Response != null)
+        var response = await httpClient.PostAsync("api/uploadedfile/sync", null);
+        if (response.IsSuccessStatusCode)
         {
-            uploadedFiles = httpResp.Response;
+            var httpResp = await http.Get<List<UploadedFilesListDTO>>("api/uploadedfile/list");
+            if (!httpResp.Error && httpResp.Response != null)
+            {
+                uploadedFiles = httpResp.Response;
+            }
+        }
+        else
+        {
+            errorPopupVisible = true;
+            var errorBody = await response.Content.ReadAsStringAsync();
+            errorText = $"{errorBody}: {response.StatusCode}";
         }
 
     }

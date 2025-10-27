@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Worklogs.DB.Data;
 using Worklogs.DB.Data.Entities;
+using Worklogs.Repository.Repository.Supabase;
 using Worklogs.Shared.DTO;
 
 

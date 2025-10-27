@@ -2,6 +2,7 @@
 using Supabase.Storage;
 using Worklogs.DB.Data.Entities;
 using Worklogs.Repository.Repository;
+using Worklogs.Repository.Repository.Supabase;
 using Worklogs.Services;
 using Worklogs.Shared.DTO;
 
@@ -55,8 +56,14 @@ namespace Worklogs.Server.Controllers
             await file.CopyToAsync(memoryStream);
             var fileBytes = memoryStream.ToArray();
 
-
-            await bucket.Upload(fileBytes, fileName);
+            try
+            {
+                await bucket.Upload(fileBytes, fileName);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Error uploading file to cloud storage: {e.Message}");
+            }
 
             var publicUrl = bucket.GetPublicUrl(fileName);
 
